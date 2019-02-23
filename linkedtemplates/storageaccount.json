@@ -2,9 +2,9 @@
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "storageAccountName":{
+    "storageAccountNameP":{
       "type": "string",
-      "defaultValue": "DefautStorage",
+      "defaultValue": "bs12",
       "metadata": {
         "description": "Azure Storage account name."
       }
@@ -17,11 +17,14 @@
       }
     }
   },
+  "variables": {
+    "storageAccountName": "[concat(uniquestring(resourceGroup().id), parameters('storageAccountNameP'))]"
+      },
   "resources": [
     {
       "type": "Microsoft.Storage/storageAccounts",
-      "name": "[parameters('storageAccountName')]",
-      "apiVersion": "2016-01-01",
+      "name": "[variables('storageAccountName')]",
+      "apiVersion": "2018-07-01",
       "location": "[parameters('location')]",
       "sku": {
         "name": "Standard_LRS"
@@ -33,7 +36,7 @@
   "outputs": {
       "storageUri": {
           "type": "string",
-          "value": "[reference(parameters('storageAccountName')).primaryEndpoints.blob]"
+          "value": "[reference(variables('storageAccountName')).primaryEndpoints.blob]"
         }
   }
 }
