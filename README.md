@@ -411,6 +411,6 @@ The linked template creates a storage account. The linked template is almost ide
 ```
 
 ```json
-echo "Enter the Resource Group name:" && read resourceGroupName && echo "Enter the Storage Account name to create:" && read storageaccountname && echo "Enter the location (i.e. westeurope):" && read location && az group create --name $resourceGroupName --location "$location" && az group deployment create --resource-group $resourceGroupName --template-file "azurestorageaccount.json"
+echo "Enter the Resource Group name:" && read resourceGroupName && echo "Enter the Storage Account name to create:" && read storageaccountname && echo "Enter the location (i.e. westeurope):" && read location && az group create --name $resourceGroupName --location "$location" && az group deployment create --resource-group $resourceGroupName --template-file "storageaccountparent.json"
 ```
 ```json```json
