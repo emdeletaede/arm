@@ -34,5 +34,5 @@ Resource Manager template simplest structure
 * **variables**: specify the values that are used as JSON fragments in the template to simplify template language expressions.
 * **resources**: specify the resource types that are deployed or updated in a resource group.
 * **outputs**: specify the values that are returned after deployment.
-2. Expand resources. There is a Microsoft.Storage/storageAccounts resource defined. The template creates a non-encrypted Storage account.
-Resource Manager template storage account definition
+2. Expand resources. There is a Microsoft.Storage/storageAccounts resource defined. The template creates a non-encrypted Storage account.  
+![Resource Manager template storage account definition](https://docs.microsoft.com/en-us/azure/azure-resource-manager/media/resource-manager-tutorial-create-encrypted-storage-accounts/resource-manager-template-encrypted-storage-resource.png)
