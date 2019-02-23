@@ -367,6 +367,48 @@ Main template |	Linked template |	Description
 [Load Balancer with public IP address](https://github.com/bsilux/arm/blob/master/linkedtemplates/public-ip-parentloadbalancer.json) |	[linked template](https://github.com/bsilux/arm/blob/master/linkedtemplates/public-ip.json)	| Returns public IP address from linked template and sets that value in load balancer.
 [Multiple IP addresses](https://github.com/bsilux/arm/blob/master/linkedtemplates/static-public-ip-parent.json) |	[linked template](https://github.com/bsilux/arm/blob/master/linkedtemplates/static-public-ip.json)	| Creates several public IP addresses in linked template.
 
+# Example of a main deployment calling an linked template to deploy a storage account
+The linked template creates a storage account. The linked template is almost identical to the standalone template that creates a storage account. In this tutorial, the linked template needs to pass a value back to the main template. This value is defined in the `outputs` element.
 ```json
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "storageAccountName":{
+      "type": "string",
+      "metadata": {
+        "description": "Azure Storage account name."
+      }
+    },
+    "location": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().location]",
+      "metadata": {
+        "description": "Location for all resources."
+      }
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "name": "[parameters('storageAccountName')]",
+      "apiVersion": "2016-01-01",
+      "location": "[parameters('location')]",
+      "sku": {
+        "name": "Standard_LRS"
+      },
+      "kind": "Storage",
+      "properties": {}
+    }
+  ],
+  "outputs": {
+      "storageUri": {
+          "type": "string",
+          "value": "[reference(parameters('storageAccountName')).primaryEndpoints.blob]"
+        }
+  }
+}
+```
+
 ```json
-```json
+```json```json```json
