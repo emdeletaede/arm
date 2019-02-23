@@ -358,6 +358,16 @@ url=$(az storage blob url \
 parameter='{"containerSasToken":{"value":"?'$token'"}}'
 az group deployment create --resource-group ExampleGroup --template-uri $url?$token --parameters $parameter
 ```
+# Example templates
+The following examples show common uses of linked templates.
+
+Main template |	Linked template |	Description
+------------- | ----------------|------------
+[Hello World](https://github.com/bsilux/arm/linkedtemplates/helloworld.json) |	[linked template]()|	Returns string from linked template.
+[Load Balancer with public IP address]() |	[linked template]()	| Returns public IP address from linked template and sets that value in load balancer.
+[Multiple IP addresses]() |	[linked template]()	| Creates several public IP addresses in linked template.
+
+[GitHub](http://github.com)
 ```json
 ```json
 ```json
