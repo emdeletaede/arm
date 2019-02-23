@@ -363,11 +363,10 @@ The following examples show common uses of linked templates.
 
 Main template |	Linked template |	Description
 ------------- | ----------------|------------
-[Hello World](https://github.com/bsilux/arm/blob/master/linkedtemplates/helloworld.json) |	[linked template]()|	Returns string from linked template.
-[Load Balancer with public IP address]() |	[linked template]()	| Returns public IP address from linked template and sets that value in load balancer.
-[Multiple IP addresses]() |	[linked template]()	| Creates several public IP addresses in linked template.
+[Hello World](https://github.com/bsilux/arm/blob/master/linkedtemplates/helloworldparent.json) |	[linked template](https://github.com/bsilux/arm/blob/master/linkedtemplates/helloworld.json)|	Returns string from linked template.
+[Load Balancer with public IP address](https://github.com/bsilux/arm/blob/master/linkedtemplates/public-ip-parentloadbalancer.json) |	[linked template](https://github.com/bsilux/arm/blob/master/linkedtemplates/public-ip.json)	| Returns public IP address from linked template and sets that value in load balancer.
+[Multiple IP addresses](https://github.com/bsilux/arm/blob/master/linkedtemplates/static-public-ip-parent.json) |	[linked template](https://github.com/bsilux/arm/blob/master/linkedtemplates/static-public-ip.json)	| Creates several public IP addresses in linked template.
 
-[GitHub](http://github.com)
 ```json
 ```json
 ```json
