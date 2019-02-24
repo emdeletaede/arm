@@ -554,10 +554,3 @@ Select Resource Group, Accept `I agree...` and launch by clicking on `Purchase`
 
 You will see if it is a success or if there is an error. You will find more details of the deployment under the deployment tag of the selected ResourceGroup!  
 
-From here on their is only clipboard garbage
-
-```json
-echo "Enter the Resource Group name:" && read resourceGroupName && echo "Enter the Storage Account name to create:" && read storageaccountname && echo "Enter the location (i.e. westeurope):" && read location && az group create --name $resourceGroupName --location "$location" && az group deployment create --resource-group $resourceGroupName --template-file "storageaccountparent.json"
-```
-```json
-``` 
