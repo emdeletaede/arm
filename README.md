@@ -208,7 +208,7 @@ To use the public IP address from the preceding template when deploying a load b
 ```
 # Linked and nested templates in deployment history
 Resource Manager processes each template as a separate deployment in the deployment history. Therefore, a main template with three linked or nested templates appears in the deployment history as:
-![Azure deployments](https://docs.microsoft.com/en-us/azure/azure-resource-manager/media/resource-group-linked-templates/deployment-history.png)
+![Azure deployments](https://docs.microsoft.com/en-us/azure/azure-resource-manager/media/resource-group-linked-templates/deployment-history.png)  
 You can use these separate entries in the history to retrieve output values after the deployment. The following template creates a public IP address and outputs the IP address:
 ```json
 {
@@ -369,48 +369,170 @@ Main template |	Linked template |	Description
 
 # Example of a main deployment calling an linked template to deploy a storage account
 The linked template creates a storage account. The linked template is almost identical to the standalone template that creates a storage account. In this tutorial, the linked template needs to pass a value back to the main template. This value is defined in the `outputs` element.
+
+The **deployment** is constituted of 3 files:  
+The **resource template**: `LegoStorage.json` 
+The **parameter template**: `LegoStorage.Parameters.json`  
+The **deployment template**: `lego.json`  
+
+
+
+First the **resource template**: `LegoStorage.json` 
 ```json
+
 {
-  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
-  "contentVersion": "1.0.0.0",
-  "parameters": {
-    "storageAccountName":{
-      "type": "string",
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {    
+      "storageAccountName": {
+        "type": "string",
+        "metadata": {
+          "description": "Name of the Storage account. (no dashes allowed)"
+        }
+      },
       "metadata": {
-        "description": "Azure Storage account name."
+        "type": "object",
+        "metadata": {
+          "description": "Metadata for this resource"
+        }
+      },    
+      "storageAccountType": {
+        "type": "string",
+        "allowedValues": [
+          "Standard_LRS",
+          "Standard_GRS",
+          "Standard_ZRS",
+          "Premium_LRS"
+        ],
+        "defaultValue": "Standard_LRS",
+        "metadata": {
+          "description": "Storage Account type"
+        }
       }
     },
-    "location": {
-      "type": "string",
-      "defaultValue": "[resourceGroup().location]",
-      "metadata": {
-        "description": "Location for all resources."
+    "variables": {    
+      "storageAccountName": "[concat(parameters('storageAccountName'), uniquestring(resourceGroup().id))]"
+    },
+    "resources": [
+      {
+        "type": "Microsoft.Storage/storageAccounts",
+        "name": "[variables('storageAccountName')]",
+        "apiVersion": "2016-01-01",
+        "tags": {
+          "department": "[parameters('metadata').department]",
+          "projectName": "[parameters('metadata').projectName]",
+          "owner": "[parameters('metadata').owner]",
+          "environment": "[parameters('metadata').environment]"
+        },
+        "location": "[resourceGroup().location]",
+        "sku": {
+          "name": "[parameters('storageAccountType')]"
+        },
+        "kind": "Storage",
+        "properties": {
+          "encryption": {
+            "keySource": "Microsoft.Storage",
+            "services": {
+              "blob": {
+                "enabled": true
+              }
+            }
+          }
+        }
+      }
+    ],
+    "outputs": {
+      "storageAccountName": {
+        "type": "string",
+        "value": "[variables('storageAccountName')]"
+      },
+      "storageAccountConnectionString": {
+        "type": "string",
+        "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageAccountName'),';AccountKey=',listKeys(variables('storageAccountName'), '2016-01-01').keys[0].value)]"
+      },
+      "blobStorageAccountConnectionString": {
+        "type": "string",
+        "value": "[concat('BlobEndpoint=https://',variables('storageAccountName'),'.blob.core.windows.net/;TableEndpoint=https://',variables('storageAccountName'),'.table.core.windows.net/')]"
+      },
+      "queueStorageAccountConnectionString": {
+        "type": "string",
+        "value": "[concat('QueueEndpoint=https://',variables('storageAccountName'),'.queue.core.windows.net/;FileEndpoint=https://',variables('storageAccountName'),'.file.core.windows.net/')]"
+      },
+      "primaryStorageAccountKey": {
+        "type": "string",
+        "value": "[listKeys(variables('storageAccountName'), '2016-01-01').keys[0].value]"
+      },
+      "secondaryStorageAccountKey": {
+        "type": "string",
+        "value": "[listKeys(variables('storageAccountName'), '2016-01-01').keys[1].value]"
       }
     }
-  },
-  "resources": [
-    {
-      "type": "Microsoft.Storage/storageAccounts",
-      "name": "[parameters('storageAccountName')]",
-      "apiVersion": "2016-01-01",
-      "location": "[parameters('location')]",
-      "sku": {
-        "name": "Standard_LRS"
-      },
-      "kind": "Storage",
-      "properties": {}
-    }
-  ],
-  "outputs": {
-      "storageUri": {
-          "type": "string",
-          "value": "[reference(parameters('storageAccountName')).primaryEndpoints.blob]"
-        }
   }
+```
+
+
+Second the **parameter template**: `LegoStorage.Parameters.json`  
+```json
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "storageAccountName": {
+            "value": "bsi27890"
+        },
+        "metadata": {
+            "value": {
+                "department": "IT",
+                "company": "LuxSE",
+                "projectName": "lego",
+                "owner": "bsi@pt.lu",
+                "environment": "dev"
+            }
+        },
+        "storageAccountType": {
+            "value": "Standard_LRS"
+        }
+    }
 }
 ```
+
+
+Thrid the **deployment template**: `lego.json`   
+```json
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {},
+    "variables": {
+        "templateBaseUrl": "https://raw.githubusercontent.com/bsilux/armtemplates/master/templates/Storage/",
+        "templateUrl": "[concat(variables('templateBaseUrl'), 'LegoStorage.json')]",
+        "parametersUrl": "[concat(variables('templateBaseUrl'), 'LegoStorage.Parameters.json')]"
+    },
+    "resources": [
+        {
+           "apiVersion": "2017-05-10",
+           "name": "linkedTemplate",
+           "type": "Microsoft.Resources/deployments",
+           "properties": {
+             "mode": "Incremental",
+             "templateLink": {
+                "uri":"[variables('templateUrl')]",
+                "contentVersion":"1.0.0.0"
+             },
+             "parametersLink": {
+                "uri":"[variables('parametersUrl')]",
+                "contentVersion":"1.0.0.0"
+             }
+           }
+        }
+      ],
+    "outputs": {}
+  }
+```
+From here on their is only clipboard garbage
 
 ```json
 echo "Enter the Resource Group name:" && read resourceGroupName && echo "Enter the Storage Account name to create:" && read storageaccountname && echo "Enter the location (i.e. westeurope):" && read location && az group create --name $resourceGroupName --location "$location" && az group deployment create --resource-group $resourceGroupName --template-file "storageaccountparent.json"
 ```
-```json```json
+```json
+```
