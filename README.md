@@ -542,8 +542,13 @@ lego.json  - <a href="https://portal.azure.com/#create/Microsoft.Template/uri/ht
 
 This template creates a Standard Storage account. For more information, see here:
 
-http://azure.microsoft.com/en-us/documentation/articles/storage-create-storage-account/
+http://azure.microsoft.com/en-us/documentation/articles/storage-create-storage-account/  
 
+Select Resource Group, Accept `I agree...` and launch by clicking on `Purchase'  
+
+Yoou will see if it is a success or if there is an error. You will find more details of the deployment under the deployment tag of the selected ResourceGroup!  
+
+![Resource Manager](CustomDeployment.png)  
 
 From here on their is only clipboard garbage
 
