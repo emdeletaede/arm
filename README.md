@@ -371,7 +371,7 @@ Main template |	Linked template |	Description
 The linked template creates a storage account. The linked template is almost identical to the standalone template that creates a storage account. In this tutorial, the linked template needs to pass a value back to the main template. This value is defined in the `outputs` element.
 
 The **deployment** is constituted of 3 files:  
-The **resource template**: `LegoStorage.json` 
+The **resource template**: `LegoStorage.json`  
 The **parameter template**: `LegoStorage.Parameters.json`  
 The **deployment template**: `lego.json`  
 
@@ -529,6 +529,22 @@ Thrid the **deployment template**: `lego.json`
     "outputs": {}
   }
 ```
+
+# Create a Standard Storage Account by executing lego.json
+
+lego.json  - <a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fbsilux%2Farmtemplates%2Fmaster%2Ftemplates%2FStorage%2Flego.json" target="_blank">
+    <img src="http://azuredeploy.net/deploybutton.png"/>
+</a>
+<a href="http://armviz.io/#/?load=https%3A%2F%2Fraw.githubusercontent.com%2Fbsilux%2Farmtemplates%2Fmaster%2Ftemplates%2FStorage%2Flego.json"
+ target="_blank">
+    <img src="http://armviz.io/visualizebutton.png"/>
+</a>
+
+This template creates a Standard Storage account. For more information, see here:
+
+http://azure.microsoft.com/en-us/documentation/articles/storage-create-storage-account/
+
+
 From here on their is only clipboard garbage
 
 ```json
