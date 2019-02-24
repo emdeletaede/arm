@@ -548,7 +548,7 @@ Select Resource Group, Accept `I agree...` and launch by clicking on `Purchase`
 
 **Resource Manager after launch**  
 
-![Resource Manager](CustomDeploymet.png)  
+![Resource Manager](CustomDeployment.png)  
 
 **Examin results**  
 
