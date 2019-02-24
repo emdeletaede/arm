@@ -375,7 +375,7 @@ The **resource template**: `LegoStorage.json`
 The **parameter template**: `LegoStorage.Parameters.json`  
 The **deployment template**: `lego.json`  
 
-
+Find files under https://github.com/bsilux/armtemplates/tree/master/templates/Storage  
 
 First the **resource template**: `LegoStorage.json` 
 ```json
